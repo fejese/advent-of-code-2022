@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ -n "${1:-}" ]; then
+    day=$1
+else
+    read -p "day? " day
+fi
+
+dir="day-$day"
+
+[ -d "$dir" ] || mkdir "$dir"
+
+for solv in "$dir"/solv-{1,2}.py; do
+    [ -f "$solv" ] && continue
+    cat > $solv <<PY
+#!/usr/bin/env python3
+
+INPUT_FILE_NAME: str = "test-input"
+# INPUT_FILE_NAME: str = "input"
+
+with open(INPUT_FILE_NAME, "r") as input_file:
+    pass
+PY
+    chmod +x "$solv"
+done
+
+touch "$dir/input" "$dir/test-input"
+
+echo "Input?"
+cat > "$dir/input"
+
+echo "Test input?"
+cat > "$dir/test-input"
